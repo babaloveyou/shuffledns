@@ -140,7 +140,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	for _, record := range st.IP {
 		// We've stumbled upon a wildcard, just ignore it.
 		c.wildcardIPMutex.Lock()
-		if i, ok := c.wildcardIPMap[record.IP]; ok {
+		if _, ok := c.wildcardIPMap[record.IP]; ok {
 			c.wildcardIPMutex.Unlock()
 			continue
 		}
