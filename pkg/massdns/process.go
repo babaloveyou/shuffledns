@@ -136,6 +136,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	// Start to work in parallel on wildcards
 	wildcardWg := sizedwaitgroup.New(c.config.WildcardsThreads)
 	count:=0
+	deletecount:=0
 	for _, record := range st.IP {
 		// We've stumbled upon a wildcard, just ignore it.
 		c.wildcardIPMutex.Lock()
@@ -176,7 +177,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 		}
 
 	count++
-	gologger.Infof("Task %d", count)	
+	gologger.Infof("Task : %d", count)	
 	}
 
 	wildcardWg.Wait()
@@ -184,6 +185,8 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	// drop all wildcard from the store
 	for wildcardIP := range c.wildcardIPMap {
 		st.Delete(wildcardIP)
+		deletecount++
+		gologger.Infof("Delete: %d", deletecount)
 	}
 
 	return nil
