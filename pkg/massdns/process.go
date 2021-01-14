@@ -140,7 +140,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	for _, record := range st.IP {
 		// We've stumbled upon a wildcard, just ignore it.
 		c.wildcardIPMutex.Lock()
-		if _, ok := c.wildcardIPMap[record.IP]; ok {
+		if i, ok := c.wildcardIPMap[record.IP]; ok {
 			c.wildcardIPMutex.Unlock()
 			continue
 		}
@@ -177,7 +177,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 		}
 
 	count++
-	gologger.Infof("Task : %d", count)	
+	gologger.Infof("Task : %d/%d", count,i)	
 	}
 
 	wildcardWg.Wait()
