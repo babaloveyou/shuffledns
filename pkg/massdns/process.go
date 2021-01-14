@@ -142,7 +142,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 		
         bar := goprogressor.AddBar(record.Counter).AppendCompleted().PrependElapsed()
 	bar.PrependFunc(func(b *goprogressor.Bar) string {
-  return fmt.Sprintf("Remove Wildcard Task (%d/%d)", b.Current(), record.Counter)
+  return fmt.Sprintf("(%d/%d)", b.Current(), record.Counter)
 })	
 		goprogressor.Start()
 		c.wildcardIPMutex.Lock()
@@ -170,7 +170,6 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						c.wildcardIPMutex.Unlock()
 					}
                                          bar.Incr()
-					gologger.Infof("FHack!\n")
 					if isWildcard {
 						c.wildcardIPMutex.Lock()
 						// we also mark the original ip as wildcard, since at least once it resolved to this host
