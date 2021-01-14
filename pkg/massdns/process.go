@@ -162,8 +162,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						}
 						c.wildcardIPMutex.Unlock()
 					}
-				       count++
-                                       fmt.Println("Task (%d)", count/record.Counter)
+
 					if isWildcard {
 						c.wildcardIPMutex.Lock()
 						// we also mark the original ip as wildcard, since at least once it resolved to this host
@@ -178,7 +177,8 @@ func (c *Client) filterWildcards(st *store.Store) error {
 
 		
 	}
-
+	count++
+	gologger.Infof("Task %d/%d", count,record.Counter)
 	wildcardWg.Wait()
    
 	// drop all wildcard from the store
