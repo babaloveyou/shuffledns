@@ -162,6 +162,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						c.wildcardIPMutex.Unlock()
 					}
                                         fmt.Println("url")
+					gologger.Infof("FHack!\n")
 					if isWildcard {
 						c.wildcardIPMutex.Lock()
 						// we also mark the original ip as wildcard, since at least once it resolved to this host
