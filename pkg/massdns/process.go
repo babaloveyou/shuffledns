@@ -177,7 +177,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 		}
 
 	count++
-		gologger.Infof("Task process: %d(IP :%s)", count,record.IP)	
+	gologger.Infof("Task process: %d(IP :%s Sub: %s)", count,record.IP,record.Hostnames)	
 	}
 
 	wildcardWg.Wait()
@@ -186,7 +186,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	for wildcardIP := range c.wildcardIPMap {
 		st.Delete(wildcardIP)
 		deletecount++
-		gologger.Infof("Delete: %d", deletecount)
+		gologger.Infof("Delete process: %d(IP :%s)", count,wildcardIP)	
 	}
 
 	return nil
