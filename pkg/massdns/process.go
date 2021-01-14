@@ -176,7 +176,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 		}
 
 	count++
-	gologger.Infof("Task %d/%d", count,record.Counter)	
+	gologger.Infof("Task %d", count)	
 	}
 
 	wildcardWg.Wait()
