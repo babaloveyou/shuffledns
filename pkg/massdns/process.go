@@ -175,10 +175,10 @@ func (c *Client) filterWildcards(st *store.Store) error {
 			}(record)
 		}
 
-		
-	}
 	count++
-	gologger.Infof("Task %d/%d", count,record.Counter)
+	gologger.Infof("Task %d/%d", count,record.Counter)	
+	}
+
 	wildcardWg.Wait()
    
 	// drop all wildcard from the store
