@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"gitee.com/shirdonl/goProgressor"
 	"github.com/projectdiscovery/gologger"
 	"github.com/projectdiscovery/shuffledns/internal/store"
 	"github.com/projectdiscovery/shuffledns/pkg/parser"
@@ -67,7 +66,7 @@ func (c *Client) Process() error {
 
 	// Perform wildcard filtering only if domain name has been specified
 	if c.config.Domain != "" {
-		gologger.Infof("Started removing wildcards records-----\n")
+		gologger.Infof("Started removing wildcards records\n")
 		err = c.filterWildcards(shstore)
 		if err != nil {
 			return fmt.Errorf("could not parse massdns output: %w", err)
@@ -136,15 +135,9 @@ func (c *Client) parseMassDNSOutput(output string, store *store.Store) error {
 func (c *Client) filterWildcards(st *store.Store) error {
 	// Start to work in parallel on wildcards
 	wildcardWg := sizedwaitgroup.New(c.config.WildcardsThreads)
-
+	count:=0
 	for _, record := range st.IP {
 		// We've stumbled upon a wildcard, just ignore it.
-		
-        bar := goprogressor.AddBar(record.Counter).AppendCompleted().PrependElapsed()
-	bar.PrependFunc(func(b *goprogressor.Bar) string {
-  return fmt.Sprintf("(%d/%d)", b.Current(), record.Counter)
-})	
-		goprogressor.Start()
 		c.wildcardIPMutex.Lock()
 		if _, ok := c.wildcardIPMap[record.IP]; ok {
 			c.wildcardIPMutex.Unlock()
@@ -169,7 +162,8 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						}
 						c.wildcardIPMutex.Unlock()
 					}
-                                         bar.Incr()
+				       count++
+                                       fmt.Println("Remove Wildcard Task (%d/%d)",  record.Counter)
 					if isWildcard {
 						c.wildcardIPMutex.Lock()
 						// we also mark the original ip as wildcard, since at least once it resolved to this host
@@ -186,7 +180,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	}
 
 	wildcardWg.Wait()
-        goprogressor.Stop()
+   
 	// drop all wildcard from the store
 	for wildcardIP := range c.wildcardIPMap {
 		st.Delete(wildcardIP)
