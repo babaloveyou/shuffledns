@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
+	"gitee.com/shirdonl/goProgressor"
 	"github.com/projectdiscovery/gologger"
 	"github.com/projectdiscovery/shuffledns/internal/store"
 	"github.com/projectdiscovery/shuffledns/pkg/parser"
@@ -136,7 +136,8 @@ func (c *Client) parseMassDNSOutput(output string, store *store.Store) error {
 func (c *Client) filterWildcards(st *store.Store) error {
 	// Start to work in parallel on wildcards
 	wildcardWg := sizedwaitgroup.New(c.config.WildcardsThreads)
-
+    count := 1000
+    bar := goprogressor.AddBar(count).AppendCompleted().PrependElapsed()
 	for _, record := range st.IP {
 		// We've stumbled upon a wildcard, just ignore it.
 		c.wildcardIPMutex.Lock()
@@ -168,16 +169,19 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						c.wildcardIPMutex.Lock()
 						// we also mark the original ip as wildcard, since at least once it resolved to this host
 						c.wildcardIPMap[record.IP] = struct{}{}
+						fmt.
 						c.wildcardIPMutex.Unlock()
 						break
 					}
+					fmt.Fprintf(os.Stdout, "%d%% [%s]\r",i,getS(i,"#") + getS(100-i," "))
 				}
 			}(record)
 		}
+		bar.Incr()
 	}
 
 	wildcardWg.Wait()
-
+    goprogressor.Stop()
 	// drop all wildcard from the store
 	for wildcardIP := range c.wildcardIPMap {
 		st.Delete(wildcardIP)
@@ -231,3 +235,4 @@ func (c *Client) writeOutput(store *store.Store) error {
 	}
 	return nil
 }
+
