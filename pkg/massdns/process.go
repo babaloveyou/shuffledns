@@ -137,7 +137,6 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	wildcardWg := sizedwaitgroup.New(c.config.WildcardsThreads)
 	for _, record := range st.IP {
 		// We've stumbled upon a wildcard, just ignore it.
-		fmt.Errorf("filterWildcards outpu77777")
 		c.wildcardIPMutex.Lock()
 		if _, ok := c.wildcardIPMap[record.IP]; ok {
 			c.wildcardIPMutex.Unlock()
@@ -162,7 +161,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						}
 						c.wildcardIPMutex.Unlock()
 					}
-
+                                        fmt.Println("url")
 					if isWildcard {
 						c.wildcardIPMutex.Lock()
 						// we also mark the original ip as wildcard, since at least once it resolved to this host
