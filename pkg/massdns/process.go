@@ -137,7 +137,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	wildcardWg := sizedwaitgroup.New(c.config.WildcardsThreads)
 	count:=0
 	deletecount:=0
-	for _, record := range st.IP {
+	for step:=0, record := range st.IP {
 		// We've stumbled upon a wildcard, just ignore it.
 		c.wildcardIPMutex.Lock()
 		if i, ok := c.wildcardIPMap[record.IP]; ok {
@@ -177,7 +177,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 		}
 
 	count++
-	gologger.Infof("Task : %d/%d", count,i)	
+	gologger.Infof("Task : %d/%d", count,step)	
 	}
 
 	wildcardWg.Wait()
