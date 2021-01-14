@@ -172,7 +172,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						c.wildcardIPMutex.Unlock()
 						break
 					}
-					fmt.Fprintf(os.Stdout, "%d%% [%s]\r",i,getS(i,"#") + getS(100-i," "))
+					
 				}
 			}(record)
 		}
