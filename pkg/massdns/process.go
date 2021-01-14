@@ -163,7 +163,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						c.wildcardIPMutex.Unlock()
 					}
 				       count++
-                                       fmt.Println("Remove Wildcard Task (%d/%d)", count, record.Counter)
+                                       fmt.Println("Task (%d)", count/record.Counter)
 					if isWildcard {
 						c.wildcardIPMutex.Lock()
 						// we also mark the original ip as wildcard, since at least once it resolved to this host
