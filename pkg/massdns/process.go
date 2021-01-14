@@ -136,10 +136,9 @@ func (c *Client) parseMassDNSOutput(output string, store *store.Store) error {
 func (c *Client) filterWildcards(st *store.Store) error {
 	// Start to work in parallel on wildcards
 	wildcardWg := sizedwaitgroup.New(c.config.WildcardsThreads)
-        count := 1000
-        bar := goprogressor.AddBar(count).AppendCompleted().PrependElapsed()
+        bar := goprogressor.AddBar(record.Counter).AppendCompleted().PrependElapsed()
 	bar.PrependFunc(func(b *goprogressor.Bar) string {
-  return fmt.Sprintf("Task (%d/%d)", b.Current(), count)
+  return fmt.Sprintf("Remove Wildcard Task (%d/%d)", b.Current(), record.Counter)
 })
 	goprogressor.Start()
 	for _, record := range st.IP {
