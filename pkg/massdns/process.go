@@ -143,7 +143,8 @@ func (c *Client) filterWildcards(st *store.Store) error {
         bar := goprogressor.AddBar(record.Counter).AppendCompleted().PrependElapsed()
 	bar.PrependFunc(func(b *goprogressor.Bar) string {
   return fmt.Sprintf("Remove Wildcard Task (%d/%d)", b.Current(), record.Counter)
-})	goprogressor.Start()
+})	
+		goprogressor.Start()
 		c.wildcardIPMutex.Lock()
 		if _, ok := c.wildcardIPMap[record.IP]; ok {
 			c.wildcardIPMutex.Unlock()
