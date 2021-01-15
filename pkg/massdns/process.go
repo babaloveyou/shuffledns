@@ -156,18 +156,18 @@ func (c *Client) filterWildcards(st *store.Store) error {
 				for host := range record.Hostnames {
 					 isWildcard,ips := c.wildcardResolver.LookupHost(host)
 					if len(ips) > 0 {
-						c.wildcardIPMutex.Lock()
-						for ip := range ips {
+						//c.wildcardIPMutex.Lock()
+						//for ip := range ips {
 							// we add the single ip to the wildcard list
-							c.wildcardIPMap[ip] = struct{}{}
+						//	c.wildcardIPMap[ip] = struct{}{}
 						}
-						c.wildcardIPMutex.Unlock()
+						//c.wildcardIPMutex.Unlock()
 					}
 					if isWildcard {
-						//c.wildcardIPMutex.Lock()
-						// we also mark the original ip as wildcard, since at least once it resolved to this host
-						//c.wildcardIPMap[record.IP] = struct{}{}
-						//c.wildcardIPMutex.Unlock()
+						c.wildcardIPMutex.Lock()
+						 we also mark the original ip as wildcard, since at least once it resolved to this host
+						c.wildcardIPMap[record.IP] = struct{}{}
+						c.wildcardIPMutex.Unlock()
 						break
 					}
 
@@ -183,7 +183,6 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	}
 
 	wildcardWg.Wait()
-        gologger.Infof("Wait")
 	// drop all wildcard from the store
 	for wildcardIP := range c.wildcardIPMap {
 		st.Delete(wildcardIP)
