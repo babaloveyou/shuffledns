@@ -154,7 +154,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 				defer wildcardWg.Done()
 
 				for host := range record.Hostnames {
-					 ips := c.wildcardResolver.LookupHost(host)
+					 isWildcard,ips := c.wildcardResolver.LookupHost(host)
 					if len(ips) > 0 {
 						c.wildcardIPMutex.Lock()
 						for ip := range ips {
@@ -163,7 +163,15 @@ func (c *Client) filterWildcards(st *store.Store) error {
 						}
 						c.wildcardIPMutex.Unlock()
 					}
+					if isWildcard {
+						//c.wildcardIPMutex.Lock()
+						// we also mark the original ip as wildcard, since at least once it resolved to this host
+						//c.wildcardIPMap[record.IP] = struct{}{}
+						//c.wildcardIPMutex.Unlock()
+						break
+					}
 
+				
 
 				
 				}
