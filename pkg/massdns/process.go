@@ -153,7 +153,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 			go func(record *store.IPMeta) {
 				defer wildcardWg.Done()
 
-				for host := range record.Hostnames {
+				//for host := range record.Hostnames {
 					//isWildcard, ips := c.wildcardResolver.LookupHost(host)
 					//if len(ips) > 0 {
 					//	c.wildcardIPMutex.Lock()
@@ -172,7 +172,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 					//	break
 					//}
 				
-				}
+				//}
 			}(record)
 		}
 	count++
