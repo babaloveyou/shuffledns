@@ -154,7 +154,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 				defer wildcardWg.Done()
 
 				for host := range record.Hostnames {
-					isWildcard, ips := c.wildcardResolver.LookupHost(host)
+					 ips := c.wildcardResolver.LookupHost(host)
 					if len(ips) > 0 {
 						c.wildcardIPMutex.Lock()
 						for ip := range ips {
