@@ -181,7 +181,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 	}
 
 	wildcardWg.Wait()
-   
+        gologger.Infof("Wait")
 	// drop all wildcard from the store
 	for wildcardIP := range c.wildcardIPMap {
 		st.Delete(wildcardIP)
