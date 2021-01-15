@@ -161,7 +161,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 							// we add the single ip to the wildcard list
 						//	c.wildcardIPMap[ip] = struct{}{}
 						
-						}
+						//}
 						//c.wildcardIPMutex.Unlock()
 					}
                    
