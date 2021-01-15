@@ -165,7 +165,7 @@ func (c *Client) filterWildcards(st *store.Store) error {
 					}
 					if isWildcard {
 						c.wildcardIPMutex.Lock()
-						 we also mark the original ip as wildcard, since at least once it resolved to this host
+						// we also mark the original ip as wildcard, since at least once it resolved to this host
 						c.wildcardIPMap[record.IP] = struct{}{}
 						c.wildcardIPMutex.Unlock()
 						break
