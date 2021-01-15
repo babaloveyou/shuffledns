@@ -66,7 +66,7 @@ func (c *Client) Process() error {
 
 	// Perform wildcard filtering only if domain name has been specified
 	if c.config.Domain != "" {
-		gologger.Infof("Started removing wildcards records\n")
+		gologger.Infof("Started removing wildcards records------\n")
 		err = c.filterWildcards(shstore)
 		if err != nil {
 			return fmt.Errorf("could not parse massdns output: %w", err)
@@ -153,16 +153,17 @@ func (c *Client) filterWildcards(st *store.Store) error {
 			go func(record *store.IPMeta) {
 				defer wildcardWg.Done()
 
-				//for host := range record.Hostnames {
-					// isWildcard,ips := c.wildcardResolver.LookupHost(host)
+				for host := range record.Hostnames {
+					//isWildcard, ips := c.wildcardResolver.LookupHost(host)
 					//if len(ips) > 0 {
-						//c.wildcardIPMutex.Lock()
-						//for ip := range ips {
+					//	c.wildcardIPMutex.Lock()
+					//	for ip := range ips {
 							// we add the single ip to the wildcard list
-							//c.wildcardIPMap[ip] = struct{}{}
-						//}
-						//c.wildcardIPMutex.Unlock()
+					//		c.wildcardIPMap[ip] = struct{}{}
+					//	}
+					//	c.wildcardIPMutex.Unlock()
 					//}
+                   
 					//if isWildcard {
 					//	c.wildcardIPMutex.Lock()
 						// we also mark the original ip as wildcard, since at least once it resolved to this host
@@ -170,19 +171,17 @@ func (c *Client) filterWildcards(st *store.Store) error {
 					//	c.wildcardIPMutex.Unlock()
 					//	break
 					//}
-
-				
-
 				
 				}
 			}(record)
 		}
-
 	count++
-	gologger.Infof("Task process: %d(IP :%s)", count,record.IP)	
+	gologger.Infof("Task process: %d(IP :%s)", count,record.IP)
+		
 	}
 
 	wildcardWg.Wait()
+    
 	// drop all wildcard from the store
 	for wildcardIP := range c.wildcardIPMap {
 		st.Delete(wildcardIP)
